@@ -29,9 +29,6 @@ const io = new Server(server, {
 // Initialize Socket.io
 setupSocketHandlers(io);
 
-// Export the app for Vercel Serverless
-module.exports = app;
-
 // Only listen when running locally
 if (process.env.NODE_ENV !== 'production') {
     const PORT = process.env.PORT || 5000;
@@ -39,3 +36,6 @@ if (process.env.NODE_ENV !== 'production') {
         console.log(`Server is running on port ${PORT}`);
     });
 }
+
+// Export the app for Vercel Serverless
+module.exports = app;
