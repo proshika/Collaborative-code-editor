@@ -29,13 +29,11 @@ const io = new Server(server, {
 // Initialize Socket.io
 setupSocketHandlers(io);
 
-// Only listen when running locally
-if (process.env.NODE_ENV !== 'production') {
-    const PORT = process.env.PORT || 5000;
-    server.listen(PORT, () => {
-        console.log(`Server is running on port ${PORT}`);
-    });
-}
+// Start the server for Localhost and Render
+const PORT = process.env.PORT || 5000;
+server.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
 
 // Export the app for Vercel Serverless
 module.exports = app;
