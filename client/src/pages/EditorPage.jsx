@@ -163,7 +163,7 @@ const EditorPage = () => {
     };
 
     const handleAISubmit = async (e) => {
-        e.preventDefault();
+        if (e) e.preventDefault();
         
         // 1. Validation before triggering any logic
         const trimmedPrompt = aiPrompt.trim();
@@ -178,15 +178,16 @@ const EditorPage = () => {
 
         // 2. Prepare UI for response
         const userMessage = { role: 'user', content: trimmedPrompt };
-        setAiMessages(prev => [...prev, userMessage]);
+        
+        // Clear input and update loading state immediately
         setAiPrompt('');
         setIsAILoading(true);
+        
+        // Update messages with user message and placeholder for AI
+        setAiMessages(prev => [...prev, userMessage, { role: 'ai', content: '' }]);
 
-        let aiResponseContent = '';
         const aiMessageIndex = aiMessages.length + 1;
-
-        // Add placeholder AI message
-        setAiMessages(prev => [...prev, { role: 'ai', content: '' }]);
+        let aiResponseContent = '';
 
         try {
             // 3. Structured payload stringification (handled by chatWithAI)
@@ -198,7 +199,9 @@ const EditorPage = () => {
                 aiResponseContent += chunk;
                 setAiMessages(prev => {
                     const newMessages = [...prev];
-                    newMessages[aiMessageIndex] = { role: 'ai', content: aiResponseContent };
+                    if (newMessages[aiMessageIndex]) {
+                        newMessages[aiMessageIndex] = { role: 'ai', content: aiResponseContent };
+                    }
                     return newMessages;
                 });
             });
